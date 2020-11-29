@@ -1,6 +1,15 @@
 const FoldersService = {
-    getAllFolders(knex, user_id) {
-      return knex.select('*').from('tbr_folders').where('user_id', user_id)
+    getAllFolders(knex, user_name) {
+        return knex.raw(
+            `SELECT 
+                folder.id, 
+                folder.name,
+                folder.user_id,
+            FROM tbr_folders AS folder
+            JOIN tbr_users AS user
+            ON folder.user_id = user.id
+            WHERE user_name = ${user_name}`
+        )
     },
 
     insertFolder(knex, newFolder) {
