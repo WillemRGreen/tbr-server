@@ -18,7 +18,7 @@ booksRouter
   .route('/')
   .get((req, res, next) => {
     const knexInstance = req.app.get('db')
-    const user_name = req.user_id
+    const user_name = req.user_name
     BooksService.getAllBooks(knexInstance, user_name)
       .then(books => {
         res.json(books.map(serializeBooks))
