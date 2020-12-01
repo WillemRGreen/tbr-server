@@ -2,24 +2,21 @@ const path = require('path')
 const express = require('express')
 const xss = require('xss')
 const FoldersService = require('./folders-service')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const foldersRouter = express.Router()
 const jsonParser = express.json()
 
-const serializeFolders = folder => ({
-  id: folder.id,
-  name: xss(folder.name),
-  user_id: user_id
-})
-
 foldersRouter
   .route('/')
+  .all(requireAuth)
   .get((req, res, next) => {
     const knexInstance = req.app.get('db')
-    const user_name = req.user_name
+    const user_name = req.user.user_name
     FoldersService.getAllFolders(knexInstance, user_name)
       .then(folders => {
-        res.json(folders.map(serializeFolders))
+        console.log(folders)
+        res.json(folders.map(FoldersService.serializeFolders))
       })
       .catch(next)
   })
@@ -35,21 +32,25 @@ foldersRouter
       }
     }
 
+    newFolder.user_id = req.user.id
+
     FoldersService.insertFolder(
       req.app.get('db'),
       newFolder
     )
       .then(folder => {
+        console.log(folder)
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${folder.id}`))
-          .json(serializeFolders(folder))
+          .json(FoldersService.serializeFolders(folder))
       })
       .catch(next)
   })
 
 foldersRouter
   .route('/:folder_id')
+  .all(requireAuth)
   .all((req, res, next) => {
     FoldersService.getById(
       req.app.get('db'),
@@ -67,7 +68,7 @@ foldersRouter
       .catch(next)
   })
   .get((req, res, next) => {
-    res.json(serializeFolder(res.folder))
+    res.json(FoldersService.serializeFolder(res.folder))
   })
   .delete((req, res, next) => {
     FoldersService.deleteFolder(

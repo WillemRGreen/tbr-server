@@ -1,16 +1,18 @@
+const xss = require('xss')
+
 const BooksService = {
     getAllBooks(knex, user_name) {
       return knex.raw(
             `SELECT 
-                books.id, 
-                books.name, 
-                books.folder_id,
-                books.user_id,
-                books.description
-            FROM tbr_books AS books
-            JOIN tbr_users AS user
-            ON books.user_id = user.id
-            WHERE user_name = ${user_name}`
+                b.id, 
+                b.name, 
+                b.folder_id,
+                b.user_id,
+                b.description
+            FROM tbr_books AS b
+            JOIN tbr_users AS u
+            ON b.user_id = u.id
+            WHERE user_name = '${user_name}'`
         )
     },
   
@@ -43,6 +45,24 @@ const BooksService = {
         .where({ id })
         .update(newBookFields)
     },
+
+    serializeBooks(book) {
+      const { user } = book
+      return {
+        id: book.id,
+        name: xss(book.name),
+        modified: new Date(book.date_created),
+        folder_id: book.folder_id,
+        description: xss(book.description),
+        user: {
+          id: user.id,
+          user_name: user.user_name,
+          full_name: user.full_name,
+          date_created: new Date(user.date_created),
+          date_modified: new Date(user.date_modified) || null
+        }
+      }
+    }
   }
   
   module.exports = BooksService

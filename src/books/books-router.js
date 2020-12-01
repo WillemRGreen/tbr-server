@@ -2,26 +2,21 @@ const path = require('path')
 const express = require('express')
 const xss = require('xss')
 const BooksService = require('./books-service')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const booksRouter = express.Router()
 const jsonParser = express.json()
 
-const serializeBooks = book => ({
-  id: book.id,
-  name: xss(book.name),
-  modified: book.date_created,
-  folder_id: book.folder_id,
-  description: book.description
-})
-
 booksRouter
   .route('/')
+  .all(requireAuth)
   .get((req, res, next) => {
     const knexInstance = req.app.get('db')
-    const user_name = req.user_name
+    const user_name = req.user.user_name
     BooksService.getAllBooks(knexInstance, user_name)
       .then(books => {
-        res.json(books.map(serializeBooks))
+        console.log(books)
+        res.json(books.map(BooksService.serializeBooks))
       })
       .catch(next)
   })
@@ -45,13 +40,14 @@ booksRouter
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${book.id}`))
-          .json(serializeBooks(book))
+          .json(BooksService.serializeBooks(book))
       })
       .catch(next)
   })
 
 booksRouter
   .route('/:book_id')
+  .all(requireAuth)
   .all((req, res, next) => {
     BooksService.getById(
       req.app.get('db'),
@@ -69,7 +65,7 @@ booksRouter
       .catch(next)
   })
   .get((req, res, next) => {
-    res.json(serializeBook(res.book))
+    res.json(BooksService.serializeBook(res.book))
   })
   .delete((req, res, next) => {
     booksService.deleteBook(
