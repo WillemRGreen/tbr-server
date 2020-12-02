@@ -16,7 +16,7 @@ foldersRouter
     FoldersService.getAllFolders(knexInstance, user_name)
       .then(folders => {
         console.log(folders)
-        res.json(folders.map(FoldersService.serializeFolders))
+        res.json(folders.rows.map(FoldersService.serializeFolders))
       })
       .catch(next)
   })
@@ -39,7 +39,6 @@ foldersRouter
       newFolder
     )
       .then(folder => {
-        console.log(folder)
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${folder.id}`))

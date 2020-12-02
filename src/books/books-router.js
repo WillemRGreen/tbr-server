@@ -15,14 +15,13 @@ booksRouter
     const user_name = req.user.user_name
     BooksService.getAllBooks(knexInstance, user_name)
       .then(books => {
-        console.log(books)
-        res.json(books.map(BooksService.serializeBooks))
+        res.json(books.rows.map(BooksService.serializeBooks))
       })
       .catch(next)
   })
   .post(jsonParser, (req, res, next) => {
-    const { name, folder_id, description, user_id } = req.body
-    const newBook = { name, folder_id, description, user_id }
+    const { name, folder_id, description } = req.body
+    const newBook = { name, folder_id, description }
 
     for (const [key, value] of Object.entries(newBook)) {
       if (value == null) {
@@ -31,6 +30,8 @@ booksRouter
         })
       }
     }
+
+    newBook.user_id = req.user.id
 
     BooksService.insertBook(
       req.app.get('db'),

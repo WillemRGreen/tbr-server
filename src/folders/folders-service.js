@@ -45,18 +45,10 @@ const FoldersService = {
     },
 
     serializeFolders(folder) {
-      const { user } = folder
       return {
         id: folder.id,
         name: xss(folder.name),
-        user_id: folder.user_id,
-        user: {
-          id: user.id,
-          user_name: xss(user.user_name),
-          full_name: xss(user.full_name),
-          date_created: new Date(user.date_created),
-          date_modified: new Date(user.date_modified) || null
-        }
+        user_id: folder.user_id
       }
     }
   }

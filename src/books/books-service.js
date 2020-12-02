@@ -47,20 +47,13 @@ const BooksService = {
     },
 
     serializeBooks(book) {
-      const { user } = book
       return {
         id: book.id,
         name: xss(book.name),
         modified: new Date(book.date_created),
         folder_id: book.folder_id,
-        description: xss(book.description),
-        user: {
-          id: user.id,
-          user_name: user.user_name,
-          full_name: user.full_name,
-          date_created: new Date(user.date_created),
-          date_modified: new Date(user.date_modified) || null
-        }
+        user_id: book.user_id,
+        description: xss(book.description)
       }
     }
   }
