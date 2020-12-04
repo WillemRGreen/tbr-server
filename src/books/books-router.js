@@ -46,6 +46,20 @@ booksRouter
       .catch(next)
   })
 
+
+booksRouter
+  .route('/completed')
+  .all(requireAuth)
+  .get((req, res, next) => {
+    const knexInstance = req.app.get('db')
+    const user_name = req.user.user_name
+    BooksService.getCompletedBooks(knexInstance, user_name)
+      .then(books => {
+        res.json(books.rows.map(BooksService.serializeBooks))
+      })
+      .catch(next)
+  })
+
 booksRouter
   .route('/:book_id')
   .all(requireAuth)

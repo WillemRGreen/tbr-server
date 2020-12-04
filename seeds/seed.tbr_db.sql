@@ -18,10 +18,10 @@ VALUES
     ('testfolder2', 2),
     ('testfolder3', 3);
 
-INSERT INTO tbr_books (name, folder_id, user_id, description)
+INSERT INTO tbr_books (name, folder_id, user_id, description, completed)
 VALUES
-    ('test title 1', 1, 1, 'this is the first test description'),
-    ('test title 2', 2, 2, 'this is the second test description'),
-    ('test title 3', 3, 3, 'this is the third test description');
+    ('test title 1', 1, 1, 'this is the first test description', FALSE),
+    ('test title 2', 2, 2, 'this is the second test description', FALSE),
+    ('test title 3', 3, 3, 'this is the third test description', FALSE);
 
 COMMIT;

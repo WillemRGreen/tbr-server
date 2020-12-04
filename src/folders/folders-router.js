@@ -15,7 +15,6 @@ foldersRouter
     const user_name = req.user.user_name
     FoldersService.getAllFolders(knexInstance, user_name)
       .then(folders => {
-        console.log(folders)
         res.json(folders.rows.map(FoldersService.serializeFolders))
       })
       .catch(next)

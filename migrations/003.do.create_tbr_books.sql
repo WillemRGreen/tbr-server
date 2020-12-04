@@ -4,5 +4,6 @@ CREATE TABLE tbr_books (
     modified TIMESTAMPTZ DEFAULT now() NOT NULL,
     folder_id INTEGER REFERENCES tbr_folders(id) ON DELETE CASCADE NOT NULL,
     user_id INTEGER REFERENCES tbr_users(id) ON DELETE CASCADE NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    completed BOOLEAN NOT NULL
 );
