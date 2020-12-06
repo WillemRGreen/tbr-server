@@ -83,7 +83,7 @@ booksRouter
     res.json(BooksService.serializeBook(res.book))
   })
   .delete((req, res, next) => {
-    booksService.deleteBook(
+    BooksService.deleteBook(
       req.app.get('db'),
       req.params.book_id
     )

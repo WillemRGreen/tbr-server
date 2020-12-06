@@ -13,26 +13,8 @@ const BooksService = {
             FROM tbr_books AS b
             JOIN tbr_users AS u
             ON b.user_id = u.id
-            WHERE user_name = '${user_name}'
-            AND completed = false`
+            WHERE user_name = '${user_name}'`
         )
-    },
-
-    getCompletedBooks(knex, user_name) {
-      return knex.raw(
-        `SELECT 
-                b.id, 
-                b.name, 
-                b.folder_id,
-                b.user_id,
-                b.description,
-                b.completed
-            FROM tbr_books AS b
-            JOIN tbr_users AS u
-            ON b.user_id = u.id
-            WHERE user_name = '${user_name}'
-            AND completed = true`
-      )
     },
   
     insertBook(knex, newBook) {
