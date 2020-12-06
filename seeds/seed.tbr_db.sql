@@ -20,8 +20,8 @@ VALUES
 
 INSERT INTO tbr_books (name, folder_id, user_id, description, completed)
 VALUES
-    ('test title 1', 1, 1, 'this is the first test description', FALSE),
-    ('test title 2', 2, 2, 'this is the second test description', FALSE),
-    ('test title 3', 3, 3, 'this is the third test description', FALSE);
+    ('test title 1', 1, 1, 'this is the first test description', false),
+    ('test title 2', 2, 2, 'this is the second test description', false),
+    ('test title 3', 3, 3, 'this is the third test description', false);
 
 COMMIT;

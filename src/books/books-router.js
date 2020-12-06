@@ -13,15 +13,15 @@ booksRouter
   .get((req, res, next) => {
     const knexInstance = req.app.get('db')
     const user_name = req.user.user_name
-    BooksService.getAllBooks(knexInstance, user_name)
+    BooksService.getTbrBooks(knexInstance, user_name)
       .then(books => {
         res.json(books.rows.map(BooksService.serializeBooks))
       })
       .catch(next)
   })
   .post(jsonParser, (req, res, next) => {
-    const { name, folder_id, description } = req.body
-    const newBook = { name, folder_id, description }
+    const { name, folder_id, description, completed } = req.body
+    const newBook = { name, folder_id, description, completed }
 
     for (const [key, value] of Object.entries(newBook)) {
       if (value == null) {
