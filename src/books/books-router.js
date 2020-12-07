@@ -93,8 +93,8 @@ booksRouter
       .catch(next)
   })
   .patch(jsonParser, (req, res, next) => {
-    const { name } = req.body
-    const bookToUpdate = { name }
+    const { completed, description, folder_id, id, name, user_id } = req.body
+    const bookToUpdate = { completed, description, folder_id, id, name, user_id }
 
     const numberOfValues = Object.values(bookToUpdate).filter(Boolean).length
     if (numberOfValues === 0)
@@ -104,7 +104,7 @@ booksRouter
         }
       })
 
-    booksService.updateBook(
+    BooksService.updateBook(
       req.app.get('db'),
       req.params.book_id,
       bookToUpdate
