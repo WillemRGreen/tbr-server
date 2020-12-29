@@ -1,3 +1,7 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+
 function makeUsersArray() {
     return [
         {
@@ -129,7 +133,7 @@ function makeAllItems() {
     const testUsers = makeUsersArray()
     const testFolders = makeFoldersArray(testUsers)
     const testBooks = makeBooksArray(testUsers, testFolders)
-    return { testUsers, testThings, testBooks }
+    return { testUsers, testFolders, testBooks }
 }
 
 function cleanTables(db) {
@@ -154,8 +158,16 @@ function seedTables(db, users, folders, books) {
         .then(() =>
             db 
                 .into('tbr_books')
-                .inser(books))
+                .insert(books))
 }
+
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+    const token = jwt.sign({ user_id: user.id }, secret, {
+      subject: user.user_name,
+      algorithm: 'HS256',
+    })
+    return `Bearer ${token}`
+  }
 
 module.exports = {
     makeBooksArray,
@@ -163,6 +175,7 @@ module.exports = {
     makeFoldersArray,
     serializeFolders,
     serializeBooks,
+    makeAuthHeader,
     makeAllItems,
     cleanTables,
     seedTables
