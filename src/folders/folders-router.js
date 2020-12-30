@@ -66,7 +66,7 @@ foldersRouter
       .catch(next)
   })
   .get((req, res, next) => {
-    res.json(FoldersService.serializeFolder(res.folder))
+    res.json(FoldersService.serializeFolders(res.folder))
   })
   .delete((req, res, next) => {
     FoldersService.deleteFolder(

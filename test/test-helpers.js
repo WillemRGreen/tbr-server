@@ -6,9 +6,9 @@ function makeUsersArray() {
     return [
         {
             id:1,
-            user_name: 'test-user1',
-            full_name: 'user 1',
-            password: 'password',
+            user_name: 'willemgreen',
+            full_name: 'willem green',
+            password: 'Willem96!',
             date_created: '2029-01-22T16:28:32.615Z'
         },
         {
@@ -161,6 +161,21 @@ function seedTables(db, users, folders, books) {
                 .insert(books))
 }
 
+function seedUsers(db, users){
+    const preppedUsers = users.map(user => ({
+        ...user,
+        password: bcrypt.hashSync(user.password, 1)
+      }))
+      return db.into('tbr_users').insert(preppedUsers)
+        .then(() =>
+          // update the auto sequence to stay in sync
+          db.raw(
+            `SELECT setval('tbr_users_id_seq', ?)`,
+            [users[users.length - 1].id],
+          )
+        )
+}
+
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign({ user_id: user.id }, secret, {
       subject: user.user_name,
@@ -178,5 +193,6 @@ module.exports = {
     makeAuthHeader,
     makeAllItems,
     cleanTables,
-    seedTables
+    seedTables,
+    seedUsers
 }
