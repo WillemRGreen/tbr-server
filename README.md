@@ -334,3 +334,15 @@ book_id: bookId
     description: String, 
     completed: BOOLEAN 
 }
+
+## technology stack
+
+Node - Run-time environment
+Express - Web application framework
+PostgresQL - Database
+JWT - Authentication
+Mocha - Testing
+Chai - Testing
+
+## Author
+Willem Green- Full Stack
